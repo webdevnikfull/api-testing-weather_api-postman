@@ -1,0 +1,262 @@
+{
+  "info": {
+    "_postman_id": "806b78b4-2bff-429e-a4be-3dbf96fcb433",
+    "name": "Postman: WeatherAPI [Nikita Rysiev]",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32999291",
+    "_collection_link": "https://go.postman.co/collection/32999291-806b78b4-2bff-429e-a4be-3dbf96fcb433?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Current day weather",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"article\": {\n    \"title\": \"{{articleTitle}}\",\n    \"description\": \"{{articleDescription}}\",\n    \"body\": \"{{articleBody}}\",\n    \"tagList\": [\n      \"postman\", \n      \"automation\"\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/current.json?key={{API_KEY}}&q=Warsaw",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "current.json"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{API_KEY}}"
+            },
+            {
+              "key": "q",
+              "value": "Warsaw"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Forecast for 3 days",
+      "request": {
+        "auth": {
+          "type": "apikey",
+          "apikey": [
+            {
+              "key": "value",
+              "value": "{{API_KEY}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/forecast.json?key={{API_KEY}}&q=Warszaw&days=3",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "forecast.json"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{API_KEY}}"
+            },
+            {
+              "key": "q",
+              "value": "Warszaw"
+            },
+            {
+              "key": "days",
+              "value": "3"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Weather at the beginning of a week",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Token {{tokenConduit}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"article\": {\n    \"title\": \"{{articleTitle}}\",\n    \"description\": \"{{articleDescription}}\",\n    \"body\": \"{{articleBody}}\",\n    \"tagList\": [\n      \"postman\", \n      \"automation\"\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{BASE_URL}}/history.json?key={{API_KEY}}&dt=2026-09-14&q=Warsaw",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "history.json"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{API_KEY}}"
+            },
+            {
+              "key": "dt",
+              "value": "2026-09-14"
+            },
+            {
+              "key": "q",
+              "value": "Warsaw"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Weather at the beginning of a month",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/history.json?key={{API_KEY}}&dt=2026-09-01&q=Warsaw",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "history.json"
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{API_KEY}}"
+            },
+            {
+              "key": "dt",
+              "value": "2026-09-01"
+            },
+            {
+              "key": "q",
+              "value": "Warsaw"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Weather month ago",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BASE_URL}}/history.json/?key={{API_KEY}}&dt=2026-08-17&q=Warsaw",
+          "host": [
+            "{{BASE_URL}}"
+          ],
+          "path": [
+            "history.json",
+            ""
+          ],
+          "query": [
+            {
+              "key": "key",
+              "value": "{{API_KEY}}",
+              "type": "text"
+            },
+            {
+              "key": "dt",
+              "value": "2026-08-17",
+              "type": "text"
+            },
+            {
+              "key": "q",
+              "value": "Warsaw",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "// Script to initialize the 'moment' library in Postman\r",
+          "const moment = require('moment');\r",
+          "\r",
+          "// Yesterday (subtract 1 day)\r",
+          "pm.collectionVariables.set('Yesterday', moment().subtract(1, 'day').format('YYYY-MM-DD'));\r",
+          "\r",
+          "// Month ago (subtract 1 month)\r",
+          "pm.collectionVariables.set('month_ago', moment().subtract(1, 'month').format('YYYY-MM-DD'));\r",
+          "\r",
+          "// Start of week\r",
+          "pm.collectionVariables.set('start_of_week', moment().startOf('isoWeek').format('YYYY-MM-DD'));\r",
+          "\r",
+          "// Start of month\r",
+          "pm.collectionVariables.set('start_of_month', moment().startOf('month').format('YYYY-MM-DD'));"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": ""
+    },
+    {
+      "key": "API_KEY",
+      "value": ""
+    },
+    {
+      "key": "city",
+      "value": ""
+    },
+    {
+      "key": "Yesterday",
+      "value": ""
+    },
+    {
+      "key": "month_ago",
+      "value": ""
+    },
+    {
+      "key": "start_of_week",
+      "value": ""
+    },
+    {
+      "key": "start_of_month",
+      "value": ""
+    }
+  ]
+}
